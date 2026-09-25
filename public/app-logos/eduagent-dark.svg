@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <!-- Background Container -->
+  <rect width="400" height="400" fill="#121212" />
+
+  <!-- Logo Mark Group (Perfectly Centered) -->
+  <g transform="translate(90, 88)" fill="none" stroke="#F4F1EA" stroke-width="16" stroke-linecap="square" stroke-linejoin="miter">
+    <!-- Left Geometric Structure (E / D) -->
+    <!-- Top Bar -->
+    <line x1="0" y1="8" x2="80" y2="8" />
+    
+    <!-- Middle Bar -->
+    <line x1="0" y1="80" x2="64" y2="80" />
+    
+    <!-- Bottom Rect Block -->
+    <rect x="0" y="116" width="80" height="108" rx="8" ry="8" />
+
+    <!-- Right Geometric Structure (U / A / R) -->
+    <!-- Outer Top Right Curve & Right Leg -->
+    <path d="M 120,8 L 208,8 A 12,12 0 0 1 220,20 L 220,224" />
+    
+    <!-- Inner Vertical Stem & Top Horizontal Branch -->
+    <line x1="140" y1="48" x2="140" y2="224" />
+    <line x1="140" y1="48" x2="188" y2="48" />
+    
+    <!-- Bottom Right Square Anchor Dot -->
+    <rect x="160" y="196" width="16" height="16" fill="#F4F1EA" stroke="none" />
+  </g>
+</svg>

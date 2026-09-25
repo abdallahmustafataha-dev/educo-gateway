@@ -1,0 +1,48 @@
+---
+import '../styles/tokens.css';
+import { getDictionary } from '../lib/copy';
+import { type Locale } from '../lib/site';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  locale?: Locale;
+  title: string;
+  description?: string;
+  compactHeader?: boolean;
+  showFooter?: boolean;
+}
+
+const { locale = 'en', title, description, compactHeader = false, showFooter = true } = Astro.props;
+const copy = getDictionary(locale);
+---
+<!doctype html>
+<html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description || copy['meta.description']} />
+    <meta name="theme-color" content="#F5F2EA" />
+    <link rel="icon" type="image/svg+xml" href="/educo-light.svg" />
+    <title>{title}</title>
+    <script is:inline>
+      try {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = saved || (prefersDark ? 'dark' : 'light');
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">{copy['a11y.skipContent']}</a>
+    <Header locale={locale} compact={compactHeader} />
+    <main id="main-content">
+      <slot />
+    </main>
+    {showFooter && <Footer locale={locale} />}
+    <script>
+      import { initSite } from '../lib/site';
+      initSite();
+    </script>
+  </body>
+</html>

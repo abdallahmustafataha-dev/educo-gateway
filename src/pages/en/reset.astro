@@ -1,0 +1,109 @@
+---
+import AuthLayout from '../../layouts/AuthLayout.astro';
+import { getDictionary } from '../../lib/copy';
+
+const locale = 'en' as const;
+const t = getDictionary(locale);
+---
+<AuthLayout locale={locale} title={`${t['auth.setPassword']} — EduCo.`} description={t['meta.description']}>
+  <section class="auth-main">
+    <div class="container auth-shell">
+      <div class="auth-card">
+        <a class="auth-brand" href={`/${locale}/`} aria-label={t['brand.home']}>
+          <span class="brand__mark"><img data-logo data-light="/educo-light.svg" data-dark="/educo-dark.svg" src="/educo-light.svg" width="36" height="36" alt="" /></span>
+          <span class="brand__word">EduCo<span>.</span></span>
+        </a>
+        <div class="auth-heading">
+          <span class="eyebrow">SECURE YOUR EDUID</span>
+          <h1>{t['auth.setPassword']}</h1>
+          <p>{t['auth.resetSub']}</p>
+        </div>
+        <div class="message-region" id="message" aria-live="polite">
+          <div class="alert alert--info">Checking your reset link…</div>
+        </div>
+        <form class="auth-form" id="reset-form" hidden>
+          <div class="form-field">
+            <label for="password">{t['auth.newPassword']}</label>
+            <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required />
+            <small>{t['auth.passwordHint']}</small>
+          </div>
+          <button class="btn btn--primary" id="submit-button" type="submit">{t['auth.setPassword']}</button>
+        </form>
+        <a class="auth-footer-link" href={`/${locale}/forgot/`}>{t['auth.forgotTitle']}</a>
+      </div>
+    </div>
+  </section>
+</AuthLayout>
+
+<script type="module">
+  import { authErrorMessage, localeFromDocument } from '../../lib/auth-ui.ts';
+  import { setButtonBusy, setMessage } from '../../lib/site.ts';
+  import { supabase } from '../../lib/supabase.ts';
+
+  const locale = localeFromDocument();
+  const form = document.querySelector('#reset-form');
+  const password = document.querySelector('#password');
+  const message = document.querySelector('#message');
+  const submitButton = document.querySelector('#submit-button');
+  const params = new URLSearchParams(window.location.search);
+  const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+  const code = params.get('code') || hashParams.get('code');
+  const tokenHash = params.get('token_hash') || hashParams.get('token_hash');
+  const otpType = params.get('type') || hashParams.get('type') || 'recovery';
+  const flowId = params.get('sb_flow_id') || hashParams.get('sb_flow_id');
+
+  const clearAuthParams = () => {
+    const url = new URL(window.location.href);
+    ['code', 'token_hash', 'type', 'sb_flow_id', 'error', 'error_code', 'error_description'].forEach((name) => url.searchParams.delete(name));
+    url.hash = '';
+    window.history.replaceState({}, '', url.toString());
+  };
+
+  const showInvalid = () => setMessage(message, 'This link is invalid or has expired.', 'error');
+
+  const prepare = async () => {
+    try {
+      const { data: initialSession } = await supabase.auth.getSession();
+      if (tokenHash) {
+        const { error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type: otpType as 'signup' | 'invite' | 'magiclink' | 'recovery' | 'email_change' | 'email' });
+        if (error) throw error;
+      } else if (code && !initialSession.session) {
+        const { error } = await supabase.auth.exchangeCodeForSession(code, flowId ? { flowId } : undefined);
+        if (error) throw error;
+      }
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        showInvalid();
+        return;
+      }
+      if (form) form.hidden = false;
+      message?.replaceChildren();
+      clearAuthParams();
+    } catch (error) {
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        showInvalid();
+        return;
+      }
+      if (form) form.hidden = false;
+      message?.replaceChildren();
+      setMessage(message, authErrorMessage(error, locale), 'info');
+    }
+  };
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!(form instanceof HTMLFormElement) || !(password instanceof HTMLInputElement) || !form.reportValidity()) return;
+    setMessage(message, '', 'info');
+    setButtonBusy(submitButton instanceof HTMLButtonElement ? submitButton : null, true, 'Working…');
+    const { error } = await supabase.auth.updateUser({ password: password.value });
+    setButtonBusy(submitButton instanceof HTMLButtonElement ? submitButton : null, false);
+    if (error) {
+      setMessage(message, authErrorMessage(error, locale));
+      return;
+    }
+    window.location.href = `/${locale}/apps/`;
+  });
+
+  void prepare();
+</script>

@@ -1,0 +1,15 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import type { Locale } from '../lib/site';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+}
+
+const { locale, title, description } = Astro.props;
+---
+<BaseLayout locale={locale} title={title} description={description} compactHeader>
+  <slot />
+</BaseLayout>

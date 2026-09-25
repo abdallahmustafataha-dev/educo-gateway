@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getDictionary } from '../lib/copy';
+
+const locale = 'en' as const;
+const t = getDictionary(locale);
+---
+<BaseLayout locale={locale} title={`${t['notFound.code']} — EduCo.`} description={t['meta.description']} showFooter={false}>
+  <section class="not-found-main">
+    <div class="container">
+      <div class="not-found-card">
+        <p class="not-found-code">{t['notFound.code']}</p>
+        <span class="eyebrow">{t['notFound.kicker']}</span>
+        <h1>{t['notFound.title']}</h1>
+        <p>{t['notFound.body']}</p>
+        <div class="not-found-actions">
+          <a class="btn btn--primary" href="/en/" data-locale-link="en">{t['error.backHome']}</a>
+          <a class="btn btn--secondary" href="/ar/" data-locale-link="ar" lang="ar" dir="rtl">العربية</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

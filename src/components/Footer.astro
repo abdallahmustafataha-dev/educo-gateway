@@ -1,0 +1,54 @@
+---
+import { getDictionary } from '../lib/copy';
+import { childApps, type Locale } from '../lib/site';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = getDictionary(locale);
+const otherLocale: Locale = locale === 'en' ? 'ar' : 'en';
+const currentPath = Astro.url.pathname;
+const pathFor = (target: Locale) => {
+  if (!/^\/(en|ar)(?=\/|$)/.test(currentPath)) return `/${target}/`;
+  return currentPath.replace(/^\/(en|ar)(?=\/|$)/, `/${target}`);
+};
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__top">
+      <div class="site-footer__identity">
+        <a class="brand brand--footer" href={`/${locale}/`} aria-label={copy['brand.home']}>
+          <span class="brand__mark"><img data-logo data-light="/educo-light.svg" data-dark="/educo-dark.svg" src="/educo-light.svg" width="40" height="40" alt="" /></span>
+          <span class="brand__word">EduCo<span>.</span></span>
+        </a>
+        <p>{copy['footer.tagline']}</p>
+      </div>
+      <div class="site-footer__links">
+        <div>
+          <span class="footer-label">{copy['footer.explore']}</span>
+          <div class="footer-app-links">
+            {childApps.map((app) => <a href={app.url} target="_blank" rel="noreferrer">{app.name}<span aria-hidden="true">↗</span></a>)}
+          </div>
+        </div>
+        <div>
+          <span class="footer-label">{copy['footer.account']}</span>
+          <div class="footer-account-links">
+            <a href={`/${locale}/login/`}>{copy['header.login']}</a>
+            <a href={`/${locale}/signup/`}>{copy['auth.signup']}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <span>© {new Date().getFullYear()} EduCo.</span>
+      <div class="footer-controls">
+        <a href={pathFor(otherLocale)} data-locale-link={otherLocale} hreflang={otherLocale}>{otherLocale === 'ar' ? 'العربية' : 'English'}</a>
+        <button class="footer-theme" type="button" data-theme-toggle data-label-light={copy['nav.theme.light']} data-label-dark={copy['nav.theme.dark']}>
+          <span data-theme-label>{copy['nav.theme.toggle']}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</footer>

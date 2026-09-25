@@ -1,0 +1,36 @@
+---
+import { getDictionary } from '../lib/copy';
+import type { Locale } from '../lib/site';
+import { appLogos } from '../lib/site';
+
+interface Props {
+  locale: Locale;
+  app: 'verse' | 'chat' | 'rafiq' | 'agent';
+  title: string;
+  description: string;
+  href: string;
+  index: string;
+  tag: string;
+  external?: boolean;
+}
+
+const { locale, app, title, description, href, index, tag, external = true } = Astro.props;
+const copy = getDictionary(locale);
+const logo = appLogos[app];
+---
+<article class={`app-card app-card--${app}`}>
+  <div class="app-card__brand">
+    <span class="app-card__logo">
+      <img data-logo data-light={logo.light} data-dark={logo.dark} src={logo.light} alt="" width="72" height="72" />
+    </span>
+    <div class="app-card__topline">
+      <span class="app-chip">{tag}</span>
+      <span class="app-index">{index}</span>
+    </div>
+  </div>
+  <h3>{title}</h3>
+  <p>{description}</p>
+  <a class="text-link" href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>
+    {copy['apps.open']} <span aria-hidden="true">↗</span>
+  </a>
+</article>

@@ -1,0 +1,96 @@
+---
+import AuthLayout from '../../layouts/AuthLayout.astro';
+import GoogleButton from '../../components/GoogleButton.astro';
+import { getDictionary } from '../../lib/copy';
+
+const locale = 'ar' as const;
+const t = getDictionary(locale);
+---
+<AuthLayout locale={locale} title={`${t['auth.login.title']} — EduCo.`} description={t['meta.description']}>
+  <section class="auth-main">
+    <div class="container auth-shell">
+      <div class="auth-card">
+        <a class="auth-brand" href={`/${locale}/`} aria-label={t['brand.home']}>
+          <span class="brand__mark"><img data-logo data-light="/educo-light.svg" data-dark="/educo-dark.svg" src="/educo-light.svg" width="36" height="36" alt="" /></span>
+          <span class="brand__word">EduCo<span>.</span></span>
+        </a>
+        <div class="auth-heading">
+          <span class="eyebrow">دخول EDUID</span>
+          <h1>{t['auth.login.title']}</h1>
+          <p>{t['auth.login.sub']}</p>
+        </div>
+        <div class="message-region" id="message" aria-live="polite"></div>
+        <form class="auth-form" id="auth-form">
+          <div class="form-field">
+            <label for="email">{t['auth.email']}</label>
+            <input id="email" name="email" type="email" autocomplete="email" required dir="ltr" />
+          </div>
+          <div class="form-field">
+            <label for="password">{t['auth.password']}</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" minlength="8" required />
+            <small>{t['auth.passwordHint']}</small>
+          </div>
+          <button class="btn btn--primary" id="submit-button" type="submit">{t['auth.login']}</button>
+        </form>
+        <div class="resend-row" id="resend-row" hidden>
+          <span>{t['auth.unverified']}</span>
+          <button class="link-button" id="resend-button" type="button">{t['auth.resend']}</button>
+        </div>
+        <div class="divider"><span>{t['auth.or']}</span></div>
+        <GoogleButton id="google-button" label={t['auth.google']} />
+        <div class="auth-links">
+          <a href={`/${locale}/forgot/`}>{t['auth.forgot']}</a>
+          <a href={`/${locale}/signup/`}>{t['auth.noAccount']}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</AuthLayout>
+
+<script type="module">
+  import { authErrorMessage, beginGoogleAuth, localeFromDocument, resendSignup } from '../../lib/auth-ui.ts';
+  import { setButtonBusy, setMessage } from '../../lib/site.ts';
+  import { supabase } from '../../lib/supabase.ts';
+
+  const locale = localeFromDocument();
+  const form = document.querySelector('#auth-form');
+  const emailInput = document.querySelector('#email');
+  const passwordInput = document.querySelector('#password');
+  const message = document.querySelector('#message');
+  const submitButton = document.querySelector('#submit-button');
+  const resendRow = document.querySelector('#resend-row');
+  const resendButton = document.querySelector('#resend-button');
+  const googleButton = document.querySelector('#google-button');
+
+  if (!(form instanceof HTMLFormElement) || !(emailInput instanceof HTMLInputElement) || !(passwordInput instanceof HTMLInputElement)) throw new Error('Login form is unavailable');
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    message?.replaceChildren();
+    setButtonBusy(submitButton instanceof HTMLButtonElement ? submitButton : null, true, 'لحظة…');
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    setButtonBusy(submitButton instanceof HTMLButtonElement ? submitButton : null, false);
+    if (error) {
+      if (resendRow) resendRow.hidden = !(error.message || '').toLowerCase().includes('confirmed');
+      setMessage(message, authErrorMessage(error, locale));
+      return;
+    }
+    if (!data.user?.email_confirmed_at) {
+      if (resendRow) resendRow.hidden = false;
+      setMessage(message, 'الإيميل لسه متأكدش. بص على الإيميل أو ابعت رسالة تانية.', 'error');
+      return;
+    }
+    window.location.href = `/${locale}/apps/`;
+  });
+
+  resendButton?.addEventListener('click', () => {
+    void resendSignup(locale, emailInput.value.trim(), resendButton instanceof HTMLButtonElement ? resendButton : null, message);
+  });
+
+  googleButton?.addEventListener('click', () => {
+    void beginGoogleAuth(locale, googleButton instanceof HTMLButtonElement ? googleButton : null, message);
+  });
+</script>

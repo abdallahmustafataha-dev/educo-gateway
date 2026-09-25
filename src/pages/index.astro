@@ -1,0 +1,29 @@
+---
+import '../styles/tokens.css';
+---
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="refresh" content="0; url=/en/" />
+    <title>EduCo.</title>
+  </head>
+  <body>
+    <main class="auth-main">
+      <div class="loading-card">
+        <div><strong>EduCo.</strong><span>Taking you to the gateway…</span></div>
+      </div>
+      <noscript><p><a href="/en/">English</a> · <a href="/ar/">العربية</a></p></noscript>
+    </main>
+    <script is:inline>
+      try {
+        const saved = localStorage.getItem('locale');
+        const locale = saved || (navigator.language.toLowerCase().startsWith('ar') ? 'ar' : 'en');
+        location.replace(`/${locale}/`);
+      } catch {
+        location.replace('/en/');
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+---
+import { getDictionary } from '../lib/copy';
+import { type Locale } from '../lib/site';
+
+interface Props {
+  locale: Locale;
+  compact?: boolean;
+}
+
+const { locale, compact = false } = Astro.props;
+const copy = getDictionary(locale);
+const currentPath = Astro.url.pathname;
+const normalizedPath = currentPath.replace(/\/+$/, '') || '/';
+const navItems = [
+  { href: `/${locale}/`, label: copy['nav.home'], active: normalizedPath === `/${locale}` },
+  { href: `/${locale}/#about`, label: copy['nav.about'], active: false },
+  { href: `/${locale}/apps/`, label: copy['nav.apps'], active: normalizedPath === `/${locale}/apps` },
+  { href: `/${locale}/#eduid`, label: copy['nav.eduid'], active: false },
+];
+const pathFor = (target: Locale) => {
+  if (!/^\/(en|ar)(?=\/|$)/.test(currentPath)) return `/${target}/`;
+  return currentPath.replace(/^\/(en|ar)(?=\/|$)/, `/${target}`);
+};
+---
+<header class:list={['site-header', { 'site-header--compact': compact }]}>
+  <div class="container site-header__inner">
+    <a class="brand" href={`/${locale}/`} aria-label={copy['brand.home']}>
+      <span class="brand__mark">
+        <img data-logo data-light="/educo-light.svg" data-dark="/educo-dark.svg" src="/educo-light.svg" width="40" height="40" alt="" />
+      </span>
+      <span class="brand__word">EduCo<span>.</span></span>
+    </a>
+    <div class="site-header__navigation" id="primary-navigation" data-nav-menu>
+      <nav class="primary-nav" aria-label={copy['nav.primary']}>
+        {navItems.map((item) => (
+          <a class:list={{ active: item.active }} href={item.href} aria-current={item.active ? 'page' : undefined}>{item.label}</a>
+        ))}
+      </nav>
+    </div>
+    <div class="site-header__actions">
+      <nav class="locale-switch" aria-label={copy['nav.language']}>
+        <a class:list={{ active: locale === 'en' }} href={pathFor('en')} data-locale-link="en" hreflang="en">EN</a>
+        <span aria-hidden="true">/</span>
+        <a class:list={{ active: locale === 'ar' }} href={pathFor('ar')} data-locale-link="ar" hreflang="ar">عربي</a>
+      </nav>
+      <button
+        class="icon-button theme-toggle"
+        type="button"
+        data-theme-toggle
+        data-label-light={copy['nav.theme.light']}
+        data-label-dark={copy['nav.theme.dark']}
+        aria-label={copy['nav.theme.light']}
+        aria-pressed="false"
+      >
+        <svg data-theme-icon="light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg>
+        <svg data-theme-icon="dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 15.2A8.5 8.5 0 0 1 8.8 3.5 8.5 8.5 0 1 0 20.5 15.2Z"></path></svg>
+      </button>
+      {!compact && (
+        <>
+          <a class="header-action" data-auth-login href={`/${locale}/login/`}>{copy['header.login']}</a>
+          <a class="header-action header-action--filled" data-auth-apps href={`/${locale}/apps/`} hidden>{copy['header.apps']}</a>
+        </>
+      )}
+      <button
+        class="nav-toggle"
+        type="button"
+        data-nav-toggle
+        aria-controls="primary-navigation"
+        aria-expanded="false"
+        aria-label={copy['nav.menu']}
+      >
+        <span class="nav-toggle__line"></span>
+        <span class="nav-toggle__line"></span>
+      </button>
+    </div>
+  </div>
+</header>

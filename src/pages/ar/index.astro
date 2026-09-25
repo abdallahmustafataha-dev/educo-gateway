@@ -1,0 +1,141 @@
+---
+import AppCard from '../../components/AppCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getDictionary } from '../../lib/copy';
+import { appLogos, childApps } from '../../lib/site';
+
+const locale = 'ar' as const;
+const t = getDictionary(locale);
+const appCopy = [
+  { key: 'verse', title: t['apps.verse.title'], description: t['apps.verse.description'], tag: t['apps.verse.tag'] },
+  { key: 'chat', title: t['apps.chat.title'], description: t['apps.chat.description'], tag: t['apps.chat.tag'] },
+  { key: 'rafiq', title: t['apps.rafiq.title'], description: t['apps.rafiq.description'], tag: t['apps.rafiq.tag'] },
+  { key: 'agent', title: t['apps.agent.title'], description: t['apps.agent.description'], tag: t['apps.agent.tag'] },
+] as const;
+---
+<BaseLayout locale={locale} title={`EduCo. — ${t['hero.title']}`} description={t['meta.description']}>
+  <section class="hero">
+    <div class="container hero__inner">
+      <div class="hero-copy">
+        <span class="eyebrow">{t['hero.eyebrow']}</span>
+        <h1>{t['hero.title']}</h1>
+        <p class="hero-subtitle">{t['hero.sub']}</p>
+        <div class="hero-actions">
+          <a class="btn btn--primary" href={`/${locale}/signup/`}>{t['hero.cta1']} <span class="btn__arrow" aria-hidden="true">←</span></a>
+          <a class="btn btn--secondary" href="#apps">{t['hero.cta2']} <span class="btn__arrow" aria-hidden="true">↓</span></a>
+        </div>
+        <p class="hero-note">{t['hero.note']}</p>
+        <div class="hero-stamp" aria-hidden="true">
+          <span>EDUCO.</span>
+          <strong>01—04</strong>
+        </div>
+      </div>
+      <div class="hero-index" aria-label={t['hero.indexLabel']}>
+        <div class="hero-index__top">
+          <span>{t['hero.indexKicker']}</span>
+          <span>01—04</span>
+        </div>
+        <div class="hero-index__list">
+          {appCopy.map((app, index) => (
+            <a class="hero-index__item" href="#apps">
+              <span class="hero-index__number">0{index + 1}</span>
+              <img class="hero-index__logo" data-logo data-light={appLogos[app.key].light} data-dark={appLogos[app.key].dark} src={appLogos[app.key].light} alt="" width="40" height="40" />
+              <span class="hero-index__name">{app.title}</span>
+              <span class="hero-index__type">{app.tag}</span>
+            </a>
+          ))}
+        </div>
+        <div class="hero-index__bottom">{t['hero.indexNote']}</div>
+      </div>
+    </div>
+    <div class="hero-ticker" aria-hidden="true">
+      <div class="hero-ticker__track">
+        <span>EDUCO.</span><span>EDUID</span><span>EDUVERSE</span><span>EDUCHAT</span><span>EDURAFIQ</span><span>EDUAGENT</span>
+        <span>EDUCO.</span><span>EDUID</span><span>EDUVERSE</span><span>EDUCHAT</span><span>EDURAFIQ</span><span>EDUAGENT</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tinted" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-panel">
+          <div>
+            <span class="section-kicker">{t['about.kicker']}</span>
+            <h2 class="section-title">{t['about.title']}</h2>
+          </div>
+          <p>{t['about.body']}</p>
+        </div>
+        <div class="about-panel about-panel--accent">
+          <span class="about-mark">EduCo. / 01</span>
+          <p>{t['about.note']}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="ambition">
+    <div class="container">
+      <div class="section-heading">
+        <div class="section-heading__copy">
+          <span class="section-kicker">{t['ambition.kicker']}</span>
+          <h2 class="section-title">{t['ambition.title']}</h2>
+        </div>
+        <p class="section-description">{t['ambition.lead']}</p>
+      </div>
+      <div class="ambition-grid">
+        {[t['ambition.1'], t['ambition.2'], t['ambition.3'], t['ambition.4']].map((item, index) => (
+          <article class="ambition-card">
+            <span class="ambition-card__number">0{index + 1}</span>
+            <p>{item}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tinted" id="apps">
+    <div class="container">
+      <div class="section-heading">
+        <div class="section-heading__copy">
+          <span class="section-kicker">{t['apps.kicker']}</span>
+          <h2 class="section-title">{t['apps.title']}</h2>
+        </div>
+        <p class="section-description">{t['apps.sub']}</p>
+      </div>
+      <div class="apps-grid">
+        {appCopy.map((app, index) => (
+          <AppCard
+            locale={locale}
+            app={app.key}
+            title={app.title}
+            description={app.description}
+            tag={app.tag}
+            index={`0${index + 1}`}
+            href={childApps[index].url}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="eduid">
+    <div class="container">
+      <div class="eduid-panel">
+        <div class="eduid-panel__intro">
+          <span class="section-kicker">{t['eduid.kicker']}</span>
+          <h2>{t['eduid.title']}</h2>
+          <p>{t['eduid.sub']}</p>
+        </div>
+        <div class="steps">
+          {[t['eduid.s1'], t['eduid.s2'], t['eduid.s3']].map((step, index) => (
+            <div class="step">
+              <span class="step__number">0{index + 1}</span>
+              <p>{step}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

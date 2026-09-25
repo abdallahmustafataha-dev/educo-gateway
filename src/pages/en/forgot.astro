@@ -1,0 +1,61 @@
+---
+import AuthLayout from '../../layouts/AuthLayout.astro';
+import { getDictionary } from '../../lib/copy';
+
+const locale = 'en' as const;
+const t = getDictionary(locale);
+---
+<AuthLayout locale={locale} title={`${t['auth.forgotTitle']} — EduCo.`} description={t['meta.description']}>
+  <section class="auth-main">
+    <div class="container auth-shell">
+      <div class="auth-card">
+        <a class="auth-brand" href={`/${locale}/`} aria-label={t['brand.home']}>
+          <span class="brand__mark"><img data-logo data-light="/educo-light.svg" data-dark="/educo-dark.svg" src="/educo-light.svg" width="36" height="36" alt="" /></span>
+          <span class="brand__word">EduCo<span>.</span></span>
+        </a>
+        <div class="auth-heading">
+          <span class="eyebrow">ACCOUNT RECOVERY</span>
+          <h1>{t['auth.forgotTitle']}</h1>
+          <p>{t['auth.forgotSub']}</p>
+        </div>
+        <div class="message-region" id="message" aria-live="polite"></div>
+        <form class="auth-form" id="reset-form">
+          <div class="form-field">
+            <label for="email">{t['auth.email']}</label>
+            <input id="email" name="email" type="email" autocomplete="email" required />
+          </div>
+          <button class="btn btn--primary" id="submit-button" type="submit">{t['auth.sendReset']}</button>
+        </form>
+        <a class="auth-footer-link" href={`/${locale}/login/`}>{t['auth.backLogin']}</a>
+      </div>
+    </div>
+  </section>
+</AuthLayout>
+
+<script type="module">
+  import { authErrorMessage, authRedirect, localeFromDocument } from '../../lib/auth-ui.ts';
+  import { setButtonBusy, setMessage } from '../../lib/site.ts';
+  import { supabase } from '../../lib/supabase.ts';
+
+  const locale = localeFromDocument();
+  const form = document.querySelector('#reset-form');
+  const email = document.querySelector('#email');
+  const message = document.querySelector('#message');
+  const submitButton = document.querySelector('#submit-button');
+
+  if (!(form instanceof HTMLFormElement) || !(email instanceof HTMLInputElement)) throw new Error('Recovery form is unavailable');
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    message?.replaceChildren();
+    setButtonBusy(submitButton instanceof HTMLButtonElement ? submitButton : null, true, 'Sending…');
+    const { error } = await supabase.auth.resetPasswordForEmail(email.value.trim(), { redirectTo: authRedirect(locale, 'reset/') });
+    setButtonBusy(submitButton instanceof HTMLButtonElement ? submitButton : null, false);
+    if (error) {
+      setMessage(message, authErrorMessage(error, locale));
+      return;
+    }
+    setMessage(message, 'Reset link sent. Valid for 1 hour.', 'success');
+  });
+</script>

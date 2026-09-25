@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getDictionary } from '../../lib/copy';
+import { childApps } from '../../lib/site';
+
+const locale = 'en' as const;
+const t = getDictionary(locale);
+const descriptions = [t['apps.verse.description'], t['apps.chat.description'], t['apps.rafiq.description'], t['apps.agent.description']];
+const tags = [t['apps.verse.tag'], t['apps.chat.tag'], t['apps.rafiq.tag'], t['apps.agent.tag']];
+---
+<BaseLayout locale={locale} title={`${t['auth.appsTitle']} — EduCo.`} description={t['meta.description']}>
+  <section class="apps-main">
+    <div class="container">
+      <div class="apps-intro">
+        <div>
+          <span class="eyebrow">EDUID / PRIVATE SPACE</span>
+          <h1>{t['auth.appsTitle']}</h1>
+        </div>
+        <p>{t['auth.appsSub']}</p>
+      </div>
+      <div class="loading-card" id="loading-card">
+        <div><strong>Checking your EduID</strong><span>One secure session, four ways forward.</span></div>
+      </div>
+      <div id="dashboard" hidden>
+        <div class="account-panel">
+          <div>
+            <span class="account-panel__label">{t['auth.account']}</span>
+            <span class="account-panel__email" id="account-email">—</span>
+          </div>
+          <span class="status-pill" id="account-status">{t['auth.verified']}</span>
+        </div>
+        <div class="dashboard-grid">
+          {childApps.map((app, index) => (
+            <a class="dashboard-card" data-app-link data-app-url={app.url} href={app.url} target="_blank" rel="noreferrer">
+              <div class="app-card__topline">
+                <span class={`app-chip app-card--${app.key}`}>{tags[index]}</span>
+                <span class="app-index">0{index + 1}</span>
+              </div>
+              <h2>{app.name}</h2>
+              <p>{descriptions[index]}</p>
+              <span class="text-link">{t['auth.open']} <span aria-hidden="true">↗</span></span>
+            </a>
+          ))}
+        </div>
+        <div class="dashboard-footer">
+          <button class="btn btn--secondary" id="logout-button" type="button">{t['auth.logout']}</button>
+        </div>
+      </div>
+      <div class="message-region" id="message" aria-live="polite"></div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script type="module">
+  import { getDictionary } from '../../lib/copy';
+  import { childApps } from '../../lib/site';
+  import { supabase } from '../../lib/supabase.ts';
+
+  const locale = document.documentElement.lang === 'ar' ? 'ar' : 'en';
+  const t = getDictionary(locale);
+  const loading = document.querySelector('#loading-card');
+  const dashboard = document.querySelector('#dashboard');
+  const email = document.querySelector('#account-email');
+  const status = document.querySelector('#account-status');
+  const message = document.querySelector('#message');
+  const logout = document.querySelector('#logout-button');
+
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  if (userError || !userData.user) {
+    window.location.replace(`/${locale}/login/`);
+  } else if (!userData.user.email_confirmed_at) {
+    window.location.replace(`/${locale}/verify/?reason=unconfirmed`);
+  } else {
+    const { data: sessionData } = await supabase.auth.getSession();
+    const accessToken = sessionData.session?.access_token;
+    if (!accessToken) {
+      window.location.replace(`/${locale}/login/`);
+    } else {
+      if (loading) loading.hidden = true;
+      if (dashboard) dashboard.hidden = false;
+      if (email) email.textContent = userData.user.email || '—';
+      if (status) {
+        status.textContent = t['auth.verified'];
+        status.classList.remove('status-pill--pending');
+      }
+      document.querySelectorAll<HTMLAnchorElement>('[data-app-link]').forEach((link) => {
+        const app = childApps.find((item) => item.url === link.dataset.appUrl);
+        if (!app) return;
+        const url = new URL(app.url);
+        url.searchParams.set('eduid', accessToken);
+        link.href = url.toString();
+      });
+    }
+  }
+
+  logout?.addEventListener('click', async () => {
+    if (logout instanceof HTMLButtonElement) logout.disabled = true;
+    await supabase.auth.signOut();
+    window.location.replace(`/${locale}/`);
+  });
+</script>
