@@ -1,4 +1,4 @@
-﻿---
+---
 import AuthLayout from '../../layouts/AuthLayout.astro';
 import { getDictionary } from '../../lib/copy';
 
@@ -96,7 +96,7 @@ const t = getDictionary(locale);
       window.setTimeout(() => window.location.replace(`/${locale}/apps/`), 900);
     } catch (error) {
       if (resendPanel) resendPanel.hidden = false;
-      setMessage(message, authErrorMessage(error, locale));
+      setMessage(message, authErrorMessage(error, locale) + (error instanceof Error && error.message ? ` [Details: ${error.message}]` : ""));
     }
   };
 

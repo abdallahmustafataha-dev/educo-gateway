@@ -1,4 +1,4 @@
-﻿---
+---
 import AuthLayout from '../../layouts/AuthLayout.astro';
 import { getDictionary } from '../../lib/copy';
 
@@ -59,7 +59,7 @@ const t = getDictionary(locale);
     window.history.replaceState({}, '', url.toString());
   };
 
-  const showInvalid = () => setMessage(message, 'This link is invalid or has expired.', 'error');
+  const showInvalid = (details = "") => setMessage(message, 'This link is invalid or has expired.' + (details ? " (Details: " + details + ")" : ""), "error");
 
   const prepare = async () => {
     try {
@@ -82,7 +82,7 @@ const t = getDictionary(locale);
     } catch (error) {
       const { data } = await supabase.auth.getSession();
       if (!data.session) {
-        showInvalid();
+        showInvalid(error instanceof Error ? error.message : String(error));
         return;
       }
       if (form) form.hidden = false;
