@@ -71,6 +71,16 @@ const t = getDictionary(locale);
     setButtonBusy(submitButton instanceof HTMLButtonElement ? submitButton : null, true, locale === 'ar' ? 'لحظة…' : 'Working…');
     const email = emailInput.value.trim();
     const password = passwordInput.value;
+    try {
+      const { data: exists } = await supabase.rpc('email_exists', { check_email: email });
+      if (exists) {
+        setButtonBusy(submitButton instanceof HTMLButtonElement ? submitButton : null, false);
+        setMessage(message, authErrorMessage({ message: 'User already registered' }, locale));
+        return;
+      }
+    } catch {
+      // If the check fails, fall through to signup and let Supabase decide.
+    }
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
