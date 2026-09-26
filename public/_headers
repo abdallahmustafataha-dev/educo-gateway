@@ -1,0 +1,10 @@
+# EduCo. security headers (Cloudflare Pages).
+# NOTE: no Content-Security-Policy here on purpose — the auth pages rely on
+# inline module scripts + Supabase/Google OAuth redirects, and a strict CSP
+# would break login. Revisit only with nonces/hashes + full QA.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
