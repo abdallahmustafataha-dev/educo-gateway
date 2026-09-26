@@ -93,7 +93,7 @@
   "auth.verifyNoParams": "افتح لينك التأكيد اللي في الإيميل عشان تكمل.",
   "auth.unverified": "الإيميل لسه متأكدش.",
   "auth.unverifiedSub": "بص على الإيميل، أو ابعت لينك تأكيد جديد.",
-  "auth.invalidCredentials": "بيانات الدخول غير صحيحة",
+  "auth.invalidCredentials": "الإيميل أو الباسورد غير صحيح.",
   "auth.emailExists": "فيه حساب بالإيميل ده بالفعل.",
   "auth.emailNotConfirmed": "الإيميل متأكدش. بص على الإيميل أو ابعت رسالة تانية.",
   "auth.rateLimited": "محاولات كتير. استنى شوية وحاول تاني.",

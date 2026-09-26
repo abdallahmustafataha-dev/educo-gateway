@@ -93,7 +93,7 @@
   "auth.verifyNoParams": "Open the confirmation link from your email to continue.",
   "auth.unverified": "Your email is not confirmed yet.",
   "auth.unverifiedSub": "Check your inbox, or send a fresh confirmation link.",
-  "auth.invalidCredentials": "Invalid credentials",
+  "auth.invalidCredentials": "Invalid email or password.",
   "auth.emailExists": "An account with this email already exists.",
   "auth.emailNotConfirmed": "Email not confirmed. Check your inbox or resend.",
   "auth.rateLimited": "Too many attempts. Please wait a moment and try again.",

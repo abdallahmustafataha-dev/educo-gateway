@@ -49,6 +49,7 @@ const t = getDictionary(locale);
 
 <script type="module">
   import { authErrorMessage, beginGoogleAuth, localeFromDocument, resendSignup } from '../../lib/auth-ui.ts';
+  import { getDictionary } from '../../lib/copy.ts';
   import { setButtonBusy, setMessage } from '../../lib/site.ts';
   import { supabase } from '../../lib/supabase.ts';
 
@@ -83,8 +84,15 @@ const t = getDictionary(locale);
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     setButtonBusy(submitButton instanceof HTMLButtonElement ? submitButton : null, false);
     if (error) {
-      if (resendRow) resendRow.hidden = !(error.message || '').toLowerCase().includes('confirmed');
-      setMessage(message, authErrorMessage(error, locale));
+      // Smart unified message: wrong email, wrong password, or both —
+      // the user always sees the same text (no account enumeration).
+      // Exception: unconfirmed email shows the resend flow instead.
+      const unconfirmed = `${error.message || ''}`.toLowerCase().includes('confirmed');
+      if (resendRow) resendRow.hidden = !unconfirmed;
+      setMessage(
+        message,
+        unconfirmed ? authErrorMessage(error, locale) : getDictionary(locale)['auth.invalidCredentials'],
+      );
       return;
     }
     if (!data.user?.email_confirmed_at) {
