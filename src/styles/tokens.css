@@ -2289,4 +2289,79 @@ html[dir="rtl"] .hero-ticker__track {
   }
 }
 
+/* ---- Mobile fixes: auth reachable + readable type + sane buttons ---- */
+.nav-auth {
+  display: none;
+}
+
+.btn {
+  text-align: center;
+}
+
+.hero h1 {
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+@media (max-width: 760px) {
+  .header-action {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+
+  .hero h1 {
+    max-width: 12ch;
+    font-size: clamp(2.4rem, 11vw, 3.5rem);
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .nav-auth {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 0.9rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .hero-index__name {
+    font-size: 1.2rem;
+  }
+
+  .auth-links {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero h1 {
+    font-size: clamp(1.9rem, 9.5vw, 2.75rem);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .auth-form .btn,
+  .google-button,
+  .dashboard-footer .btn {
+    width: 100%;
+  }
+
+  .account-panel__email {
+    overflow-wrap: anywhere;
+    font-size: 0.85rem;
+  }
+
+  .hero-ticker__track span {
+    padding: 0.6rem 0.9rem;
+  }
+}
+
 
