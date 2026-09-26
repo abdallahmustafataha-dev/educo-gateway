@@ -11,8 +11,15 @@ const anon =
   (import.meta.env.SUPABASE_ANON_KEY as string) ||
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFtdmhicHR2cGRza3l6YmZ0YWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4NzcwMjMsImV4cCI6MjEwNTQ1MzAyM30.imv7tJGQSuYBMca_XG5rJj4dJHDFZ9BQkGr85q4GtMw';
 
+// flowType 'implicit' (NOT pkce) — deliberate choice, do not "upgrade":
+// Our users open email links from phone Gmail apps / different browsers.
+// PKCE stores its code verifier in the requesting browser's storage, so any
+// link opened elsewhere dies with "code verifier not found". Implicit sends
+// token_hash links (verifyOtp works cross-browser) and hash sessions that
+// supabase-js auto-detects on page load. RLS still enforces all security.
+// Revisit only with true SSR (cookie-based verifier) — never for static.
 export const supabase = createClient(url, anon, {
-  auth: { flowType: 'pkce', autoRefreshToken: true, persistSession: true },
+  auth: { flowType: 'implicit', autoRefreshToken: true, persistSession: true },
 });
 
 export const SITE_URL =
