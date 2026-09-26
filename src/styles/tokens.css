@@ -2289,4 +2289,242 @@ html[dir="rtl"] .hero-ticker__track {
   }
 }
 
+/* ============================================================
+   MOBILE COMPAT OVERRIDES — MUST STAY LAST IN THIS FILE.
+   Why: parts of this sheet use modern range syntax
+   `@media (width<=Npx)` which older mobile browsers ignore,
+   and base layout rules sit after the classic overrides above,
+   so the cascade never collapsed on phones (hero stayed 2-col
+   with a 20rem column → squeezed text strip).
+   These classic-syntax rules come last, so they always win.
+   ============================================================ */
+.nav-auth {
+  display: none;
+}
+
+@media (max-width: 1020px) {
+  .hero__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.72fr);
+  }
+
+  .ambition-grid,
+  .apps-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .container {
+    width: min(var(--container), calc(100% - 2rem));
+  }
+
+  .site-header__inner {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .site-header__navigation {
+    position: absolute;
+    z-index: 21;
+    top: 100%;
+    right: 0;
+    left: 0;
+    display: none;
+    padding: 0.65rem 1rem 1rem;
+    border-bottom: 1px solid var(--border-strong);
+    background: var(--bg);
+  }
+
+  .site-header__navigation[data-open] {
+    display: block;
+  }
+
+  .primary-nav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .primary-nav a {
+    padding-block: 0.8rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .primary-nav a:last-child {
+    border-bottom: 0;
+  }
+
+  .nav-toggle {
+    display: grid;
+  }
+
+  .nav-auth {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 0.9rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .hero {
+    min-height: auto;
+    padding-block: 4rem 3rem;
+  }
+
+  .hero__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+  }
+
+  .hero h1 {
+    max-width: 14ch;
+    font-size: clamp(2.2rem, 10vw, 3.2rem);
+    line-height: 1.05;
+    overflow-wrap: break-word;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-stamp {
+    display: none;
+  }
+
+  .hero-index {
+    width: min(100%, 34rem);
+    box-shadow: 0.45rem 0.45rem 0 var(--accent);
+    animation: none;
+    transform: none;
+  }
+
+  .hero-index__name {
+    font-size: 1.2rem;
+  }
+
+  .about-grid,
+  .eduid-panel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .about-panel {
+    min-height: auto;
+  }
+
+  .section-heading,
+  .apps-intro,
+  .site-footer__top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .site-footer__links {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 560px) {
+  .site-header__inner {
+    min-height: 4.25rem;
+    gap: 0.75rem;
+  }
+
+  .header-action {
+    display: none;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.9rem, 9vw, 2.6rem);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-actions .btn,
+  .not-found-actions .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .hero-index__item {
+    grid-template-columns: 1.7rem 2.35rem minmax(0, 1fr);
+  }
+
+  .hero-index__logo {
+    width: 2.35rem;
+    height: 2.35rem;
+  }
+
+  .hero-index__type {
+    grid-column: 2 / -1;
+    grid-row: 2;
+    text-align: start;
+  }
+
+  .ambition-grid,
+  .apps-grid,
+  .dashboard-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ambition-card,
+  .app-card {
+    min-height: auto;
+  }
+
+  .site-footer__links {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .site-footer__bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .auth-main {
+    padding-block: 2rem 3.5rem;
+  }
+
+  .auth-card {
+    padding: 1.35rem;
+  }
+
+  .auth-links {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .auth-form .btn,
+  .google-button,
+  .dashboard-footer .btn {
+    width: 100%;
+  }
+
+  .account-panel {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .account-panel__email {
+    overflow-wrap: anywhere;
+    font-size: 0.85rem;
+  }
+
+  .hero-ticker__track span {
+    padding: 0.6rem 0.9rem;
+  }
+}
+
 
