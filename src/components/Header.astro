@@ -36,10 +36,6 @@ const pathFor = (target: Locale) => {
           <a class:list={{ active: item.active }} href={item.href} aria-current={item.active ? 'page' : undefined}>{item.label}</a>
         ))}
       </nav>
-      <div class="nav-auth">
-        <a class="btn btn--primary btn--full" data-auth-login href={`/${locale}/login/`}>{copy['header.login']}</a>
-        <a class="btn btn--primary btn--full" data-auth-apps href={`/${locale}/apps/`} hidden>{copy['header.apps']}</a>
-      </div>
     </div>
     <div class="site-header__actions">
       <nav class="locale-switch" aria-label={copy['nav.language']}>
