@@ -5,34 +5,38 @@
 <meta name="viewport" content="width=device-width" />
 <title>Confirm your EduID — EduCo.</title>
 </head>
-<body style="margin:0;padding:0;background-color:#F1F1F1;font-family:Inter,Arial,sans-serif;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F1F1F1;padding:32px 16px;">
+<body style="margin:0;padding:0;background-color:#f5f2ea;font-family:Inter,Arial,sans-serif;">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;">One click activates your EduID — one identity for EduVerse, EduChat, EduRafiq and EduAgent.</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f2ea;padding:28px 12px;">
 <tr><td align="center">
-<table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background-color:#ffffff;border:1px solid #E5E5E5;border-radius:16px;overflow:hidden;">
-<tr><td style="padding:32px 32px 8px;text-align:center;">
-<img src="https://educo.pages.dev/educo-light.png" width="56" height="56" alt="EduCo." style="display:block;margin:0 auto;" />
-<p style="margin:12px 0 0;font-size:20px;font-weight:800;color:#323232;">EduCo<span style="color:#1e5a4f;">.</span></p>
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:#fffefa;border:1px solid #dad7cc;border-radius:12px;overflow:hidden;">
+<tr><td style="background-color:#1e5a4f;padding:14px 32px;text-align:center;font-size:12px;font-weight:800;letter-spacing:2px;color:#ffffff;">EDUCO. — ONE IDENTITY</td></tr>
+<tr><td style="padding:32px 36px 0;text-align:center;">
+<img src="https://educo.pages.dev/educo-light.png" width="64" height="64" alt="EduCo." style="display:block;margin:0 auto;border:1px solid #dad7cc;border-radius:10px;background-color:#ffffff;" />
 </td></tr>
-<tr><td style="padding:16px 32px 0;">
-<h1 style="margin:0;font-size:24px;font-weight:800;color:#323232;">Confirm your EduID</h1>
-<p style="margin:12px 0 0;font-size:15px;line-height:1.6;color:#555555;">One EduID unlocks EduVerse, EduChat, EduRafiq, and EduAgent. Click below to activate your account:</p>
+<tr><td style="padding:20px 36px 0;text-align:center;">
+<p style="margin:0;font-size:12px;font-weight:800;letter-spacing:2px;color:#1e5a4f;">EDUID ACCESS</p>
+<h1 style="margin:10px 0 0;font-family:Georgia,'Times New Roman',serif;font-size:28px;font-weight:400;color:#202522;">Confirm your EduID</h1>
+<p style="margin:12px auto 0;max-width:440px;font-size:15px;line-height:1.65;color:#3b4540;">One EduID unlocks <strong>EduVerse</strong>, <strong>EduChat</strong>, <strong>EduRafiq</strong> and <strong>EduAgent</strong>. Click below to activate your account:</p>
 </td></tr>
-<tr><td align="center" style="padding:24px 32px 8px;">
-<a href="{{ .ConfirmationURL }}" style="display:inline-block;background-color:#323232;color:#F1F1F1;text-decoration:none;font-size:16px;font-weight:800;padding:14px 36px;border-radius:10px;">Confirm my email</a>
+<tr><td align="center" style="padding:26px 36px 6px;">
+<a href="{{ .ConfirmationURL }}" style="display:inline-block;background-color:#202522;color:#ffffff;text-decoration:none;font-size:16px;font-weight:800;padding:15px 44px;border-radius:8px;">Confirm my email →</a>
 </td></tr>
-<tr><td style="padding:8px 32px 0;">
-<p style="margin:0;font-size:13px;line-height:1.6;color:#888888;">Button not working? Copy this link into your browser:<br />
-<a href="{{ .ConfirmationURL }}" style="color:#1e5a4f;word-break:break-all;">{{ .ConfirmationURL }}</a></p>
+<tr><td style="padding:14px 36px 0;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f2ea;border:1px solid #dad7cc;border-radius:8px;">
+<tr><td style="padding:12px 16px;font-size:12px;line-height:1.7;color:#69736d;">Button not working? Paste this link in your browser:<br /><a href="{{ .ConfirmationURL }}" style="color:#1e5a4f;word-break:break-all;">{{ .ConfirmationURL }}</a></td></tr>
+</table>
 </td></tr>
-<tr><td style="padding:24px 32px 0;border-top:1px solid #E5E5E5;margin-top:24px;">
-<div dir="rtl" style="text-align:right;font-family:'IBM Plex Sans Arabic',Tahoma,Arial,sans-serif;">
-<p style="margin:0;font-size:20px;font-weight:800;color:#323232;">أكد الـ EduID بتاعك</p>
-<p style="margin:8px 0 0;font-size:14px;line-height:1.8;color:#555555;">هوية واحدة تفتحلك EduVerse و EduChat و EduRafiq و EduAgent. دوس الزرار عشان تفعل حسابك:</p>
-<p style="margin:16px 0;text-align:center;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;background-color:#323232;color:#F1F1F1;text-decoration:none;font-size:16px;font-weight:800;padding:14px 36px;border-radius:10px;">تأكيد الإيميل</a></p>
+<tr><td style="padding:26px 36px 0;">
+<div dir="rtl" style="text-align:right;font-family:'IBM Plex Sans Arabic',Tahoma,Arial,sans-serif;border-top:1px solid #dad7cc;padding-top:22px;">
+<p style="margin:0;font-size:12px;font-weight:800;letter-spacing:2px;color:#1e5a4f;">الدخول بهوية EduID</p>
+<p style="margin:8px 0 0;font-family:Georgia,'Times New Roman',serif;font-size:24px;color:#202522;">أكد الـ EduID بتاعك</p>
+<p style="margin:10px 0 0;font-size:14px;line-height:1.8;color:#3b4540;">هوية واحدة تفتحلك EduVerse و EduChat و EduRafiq و EduAgent. دوس الزرار عشان تفعل حسابك:</p>
+<p style="margin:18px 0 4px;text-align:center;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;background-color:#202522;color:#ffffff;text-decoration:none;font-size:16px;font-weight:800;padding:15px 44px;border-radius:8px;">تأكيد الإيميل ←</a></p>
 </div>
 </td></tr>
-<tr><td style="padding:24px 32px 32px;">
-<p style="margin:0;font-size:12px;line-height:1.6;color:#999999;">You got this email because someone registered {{ .Email }} on EduCo. If it wasn't you, just ignore it.<br />لو مسجلتش بإيميلك تجاهل الرسالة دي.<br />© 2026 EduCo. — One identity. Four focused products.</p>
+<tr><td style="padding:22px 36px 30px;">
+<p style="margin:0;font-size:12px;line-height:1.7;color:#69736d;">Someone registered {{ .Email }} on EduCo. — if it wasn't you, just ignore this email.<br />لو مسجلتش بالإيميل ده تجاهل الرسالة دي.<br />© 2026 EduCo. — One identity. Four focused products.</p>
 </td></tr>
 </table>
 </td></tr>

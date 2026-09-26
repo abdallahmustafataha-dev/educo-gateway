@@ -1,4 +1,4 @@
----
+﻿---
 import AuthLayout from '../../layouts/AuthLayout.astro';
 import { getDictionary } from '../../lib/copy';
 
@@ -47,14 +47,14 @@ const t = getDictionary(locale);
   const params = new URLSearchParams(window.location.search);
   const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
   const code = params.get('code') || hashParams.get('code');
-  const tokenHash = params.get('token_hash') || hashParams.get('token_hash');
+  const tokenHash = params.get('token_hash') || params.get('token') || hashParams.get('token_hash') || hashParams.get('token');
   const otpType = params.get('type') || hashParams.get('type') || 'signup';
   const flowId = params.get('sb_flow_id') || hashParams.get('sb_flow_id');
   const errorDescription = params.get('error_description') || hashParams.get('error_description');
 
   const clearAuthParams = () => {
     const url = new URL(window.location.href);
-    ['code', 'token_hash', 'type', 'sb_flow_id', 'error', 'error_code', 'error_description'].forEach((name) => url.searchParams.delete(name));
+    ['code', 'token_hash', 'token', 'type', 'sb_flow_id', 'error', 'error_code', 'error_description'].forEach((name) => url.searchParams.delete(name));
     url.hash = '';
     window.history.replaceState({}, '', url.toString());
   };
